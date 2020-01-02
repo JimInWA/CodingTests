@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ASPNetCoreMVC.Models.Task>
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+    <div class="text-center">
+        <h1 class="display-4">All Tasks</h1>
+        <a asp-action="AddTask" class="btn btn-sm btn-primary">Add Task</a> <a asp-action="HideCompletedTasks" class="btn btn-sm btn-primary">Hide Completed Tasks</a> 
+        <table class="table table-sm table-striped table-bordered m-2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Completed</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                    <th>Mark as complete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.Description</td>
+                    <td>@r.IsComplete</td>
+                    <td>
+                        <a asp-action="UpdateTask" asp-route-id="@r.Id">Update</a>
+                    </td>
+                    <td>
+                        <form asp-action="DeleteTask" method="post">
+                            <input type="hidden" value="@r.Id" name="taskId" />
+                            <input type="submit" value="Delete" />
+                        </form>
+                    </td>
+                    @if (r.IsComplete == true)
+                    {
+                        <td>Already marked as completed</td>
+                    }
+                    @if (r.IsComplete == false)
+                    {
+                        <td>
+                            <form asp-action="CompleteTask" method="post">
+                                <input type="hidden" value="@r.Id" name="taskId" />
+                                <input type="submit" value="Mark as complete" />
+                            </form>
+                        </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
